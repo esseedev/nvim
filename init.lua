@@ -1,5 +1,6 @@
 require 'core.keymaps'
 require 'core.options'
+_G.nvim_startup_dir = vim.fn.getcwd()
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -10,6 +11,14 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Highlight when yanking (copying) text',
+    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+})
 
 require('lazy').setup {
     require 'plugins.colorscheme',
