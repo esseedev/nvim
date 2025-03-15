@@ -1,6 +1,5 @@
 require 'core.keymaps'
 require 'core.options'
-_G.nvim_startup_dir = vim.fn.getcwd()
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
