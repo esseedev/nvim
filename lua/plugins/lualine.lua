@@ -12,7 +12,14 @@ return {
     local filename = {
       'filename',
       file_status = true, -- displays file status (readonly status, modified status)
-      path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+      path = 2, -- 0 = just filename, 1 = relative path, 2 = absolute path
+      fmt = function(str)
+        local home = os.getenv 'HOME'
+        if home then
+          str = str:gsub(home, '~')
+        end
+        return str
+      end,
     }
 
     local hide_in_width = function()
@@ -58,6 +65,7 @@ return {
       inactive_sections = {
         lualine_a = {},
         lualine_b = {},
+        lualine_c = { filename },
         lualine_y = {},
         lualine_z = {},
       },
