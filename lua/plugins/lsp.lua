@@ -215,6 +215,9 @@ return {
             sqlls = {},
             jsonls = {},
             yamlls = {},
+            angularls = {},
+            volar = {},
+            eslint = {},
 
             lua_ls = {
                 -- cmd = { ... },

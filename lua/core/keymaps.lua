@@ -38,3 +38,5 @@ keymap.set('v', '>', '>gv')
 
 keymap.set('n', '<F1>', vim.diagnostic.goto_next)
 keymap.set('n', '<F2>', vim.diagnostic.goto_prev)
+
+keymap.set('n', '<leader>pr', ':silent %!prettier %<CR>')
