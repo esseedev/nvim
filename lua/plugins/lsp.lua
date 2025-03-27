@@ -207,7 +207,34 @@ return {
             -- But for many setups, the LSP (`ts_ls`) will work just fine
             -- ts_ls = {},
             --
-            ts_ls = {},
+            ts_ls = {
+                settings = {
+                    javascript = {
+                        preferences = {
+                            importModuleSpecifier = 'non-relative',
+                        },
+                    },
+                    typescript = {
+                        preferences = {
+                            importModuleSpecifier = 'non-relative',
+                        },
+                    },
+                },
+                init_options = {
+                    preferences = {
+                        importModuleSpecifierPreference = 'non-relative',
+                    },
+                },
+                -- Disable formatting in tsserver, let Prettier handle it
+                on_attach = function(client, bufnr)
+                    -- Disable tsserver formatting, Prettier will handle formatting
+                    client.server_capabilities.document_formatting = false
+                    if client.server_capabilities.document_formatting then
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fo', ':lua vim.lsp.buf.formatting()<CR>',
+                            { noremap = true, silent = true })
+                    end
+                end,
+            },
             csharp_ls = {},
             html = { filetypes = { 'html', 'twig', 'hbs', 'ts' } },
             tailwindcss = {},
@@ -217,8 +244,22 @@ return {
             yamlls = {},
             angularls = {},
             volar = {},
-            eslint = {},
-
+            eslint = {
+                on_new_config = function(config, new_root_dir)
+                    config.settings.workspaceFolder = {
+                        uri = vim.uri_from_fname(new_root_dir),
+                        name = vim.fn.fnamemodify(new_root_dir, ''),
+                    }
+                end,
+                -- Enable ESLint formatting
+                on_attach = function(client, bufnr)
+                    if client.server_capabilities.documentFormattingProvider then
+                        -- Keymap for formatting with ESLint
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fo', ':lua vim.lsp.buf.formatting()<CR>',
+                            { noremap = true, silent = true })
+                    end
+                end,
+            },
             lua_ls = {
                 -- cmd = { ... },
                 -- filetypes = { ... },

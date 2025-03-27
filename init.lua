@@ -32,4 +32,5 @@ require('lazy').setup {
   require 'plugins.nvim-tmux-navigator',
   require 'plugins.nvim-ts-autotag',
   require 'plugins.trouble',
+  require 'plugins.harpoon',
 }
