@@ -18,6 +18,7 @@ vim.o.smartindent = true
 vim.o.undofile = true
 vim.o.swapfile = false
 vim.o.autochdir = false
+vim.o.termguicolors = true
 
 vim.cmd 'set noautochdir'
 

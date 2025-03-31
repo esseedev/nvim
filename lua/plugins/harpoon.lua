@@ -29,21 +29,21 @@ return {
         end)
 
         -- Navigation using leader + number
-        keymap('n', '<leader>1', function()
+        keymap('n', '<leader>h', function()
             harpoon:list():select(1)
         end)
-        keymap('n', '<leader>2', function()
+        keymap('n', '<leader>j', function()
             harpoon:list():select(2)
         end)
-        keymap('n', '<leader>3', function()
+        keymap('n', '<leader>k', function()
             harpoon:list():select(3)
         end)
-        keymap('n', '<leader>4', function()
+        keymap('n', '<leader>l', function()
             harpoon:list():select(4)
         end)
 
         -- Clear the entire Harpoon list
-        keymap('n', '<leader>hc', function()
+        keymap('n', '<leader>ch', function()
             harpoon:list():clear()
             print 'Cleared all files from Harpoon list'
         end)
