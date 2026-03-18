@@ -34,10 +34,15 @@ keymap.set('n', '<C-j>', ':wincmd j<CR>')
 keymap.set('n', '<C-h>', ':wincmd h<CR>')
 keymap.set('n', '<C-l>', ':wincmd l<CR>')
 
+keymap.set('n', '<F1>', function()
+  vim.diagnostic.jump { count = 1, float = true }
+end, { desc = 'Next diagnostic' })
+
+keymap.set('n', '<F2>', function()
+  vim.diagnostic.jump { count = -1, float = true }
+end, { desc = 'Previous diagnostic' })
+
 keymap.set('v', '<', '<gv')
 keymap.set('v', '>', '>gv')
-
-keymap.set('n', '<F1>', vim.diagnostic.goto_next)
-keymap.set('n', '<F2>', vim.diagnostic.goto_prev)
 
 keymap.set('n', '<leader>pr', ':silent %!prettier %<CR>')
