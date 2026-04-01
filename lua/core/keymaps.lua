@@ -11,7 +11,7 @@ keymap.set('n', '<C-d>', '<C-d>zz') -- cursor in the center of page after C-d, C
 keymap.set('n', '<C-u>', '<C-u>zz') -- cursor in the center of page after C-d, C-u
 
 keymap.set('n', 'n', 'nzzzv') -- when jumping after search, searched string is in the middle
-keymap.set('n', 'N', 'Nzzzv') -- when jumping after search, searched string is in the middlkeymap.set("n", "<leader>nh", ":nohl<CR>") -- Clear search highlights
+keymap.set('n', 'N', 'Nzzzv') -- when jumping after search, searched string is in the middle
 keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]) -- change all occurences under cursor
 
 keymap.set('x', '<leader>p', [["_dP"]])
@@ -27,7 +27,7 @@ end)
 keymap.set('n', '<leader>v', '<C-w>v')
 keymap.set('n', '<leader>h', '<C-w>s')
 keymap.set('n', '<leader>xs', ':close<CR>')
-keymap.set('n', '<leader>nh', ':noh<CR>')
+keymap.set('n', '<leader>nh', ':noh<CR>') -- Clear search highlights
 
 keymap.set('n', '<C-k>', ':wincmd k<CR>')
 keymap.set('n', '<C-j>', ':wincmd j<CR>')
@@ -46,3 +46,5 @@ keymap.set('v', '<', '<gv')
 keymap.set('v', '>', '>gv')
 
 keymap.set('n', '<leader>pr', ':silent %!prettier %<CR>')
+
+keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])

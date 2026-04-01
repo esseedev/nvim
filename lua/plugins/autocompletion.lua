@@ -39,7 +39,113 @@ return { -- Autocompletion
         -- See `:help cmp`
         local cmp = require 'cmp'
         local luasnip = require 'luasnip'
+        local s = luasnip.snippet
+        local i = luasnip.insert_node
+        local f = luasnip.function_node
+        local fmt = require('luasnip.extras.fmt').fmt
         luasnip.config.setup {}
+
+        local function to_pascal_case(value)
+            local parts = vim.split(value or '', '[^%a%d]+', { trimempty = true })
+            for index, part in ipairs(parts) do
+                parts[index] = part:sub(1, 1):upper() .. part:sub(2)
+            end
+            return table.concat(parts)
+        end
+
+        local function project_namespace_fallback()
+            local override = vim.g.cs_root_namespace
+            if type(override) == 'string' and override ~= '' then
+                return override
+            end
+
+            local cwd_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+            return to_pascal_case(cwd_name)
+        end
+
+        local function namespace_for_current_file()
+            local override = vim.g.cs_root_namespace
+            local file_dir = vim.fn.expand '%:p:h'
+
+            local csproj = vim.fs.find(function(name)
+                return name:match '%.csproj$' ~= nil
+            end, { path = file_dir, upward = true, type = 'file' })[1]
+
+            local root_namespace
+            local project_dir
+
+            if csproj then
+                project_dir = vim.fs.dirname(csproj)
+                root_namespace = vim.fn.fnamemodify(csproj, ':t:r')
+            else
+                project_dir = vim.fn.getcwd()
+                root_namespace = project_namespace_fallback()
+            end
+
+            if type(override) == 'string' and override ~= '' then
+                root_namespace = override
+            end
+
+            if not vim.startswith(file_dir, project_dir) then
+                return root_namespace
+            end
+
+            local relative_dir = file_dir:gsub('^' .. vim.pesc(project_dir) .. '/?', '')
+            if relative_dir == '' or relative_dir == '.' then
+                return root_namespace
+            end
+
+            local parts = vim.split(relative_dir, '[/\\]+', { trimempty = true })
+            if #parts > 0 and parts[1]:lower() == 'src' then
+                table.remove(parts, 1)
+            end
+
+            if #parts == 0 then
+                return root_namespace
+            end
+
+            for index, part in ipairs(parts) do
+                parts[index] = to_pascal_case(part)
+            end
+
+            return root_namespace .. '.' .. table.concat(parts, '.')
+        end
+
+        luasnip.add_snippets('cs', {
+            s(
+                'csclass',
+                fmt(
+                    [[
+namespace {};
+
+public class {}
+{{
+    {}
+}}
+]],
+                    {
+                        f(function()
+                            return namespace_for_current_file()
+                        end, {}),
+                        f(function()
+                            local class_name = vim.fn.expand '%:t:r'
+                            if class_name == '' then
+                                return 'Solution'
+                            end
+                            return to_pascal_case(class_name)
+                        end, {}),
+                        i(0),
+                    }
+                )
+            ),
+            s(
+                'prop',
+                fmt('public {} {} {{ get; set; }}', {
+                    i(1, 'string'),
+                    i(2, 'Name'),
+                })
+            ),
+        })
 
         local kind_icons = {
             Text = '󰉿',
