@@ -44,6 +44,16 @@ return {
       cond = hide_in_width,
     }
 
+    local branch = {
+      'branch',
+      fmt = function(str)
+        if vim.fn.strchars(str) > 40 then
+          return vim.fn.strcharpart(str, 0, 40) .. '...'
+        end
+        return str
+      end,
+    }
+
     require('lualine').setup {
       options = {
         icons_enabled = true,
@@ -57,10 +67,9 @@ return {
       },
       sections = {
         lualine_a = { mode },
-        lualine_b = { 'branch' },
+        lualine_b = { branch },
         lualine_c = { filename },
         lualine_x = { diagnostics, diff, { 'encoding', cond = hide_in_width }, { 'filetype', cond = hide_in_width } },
-        lualine_z = { 'progress' },
       },
       inactive_sections = {
         lualine_a = {},
