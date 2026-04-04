@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 require('lazy').setup({
-  require 'plugins.colorscheme',
+  require 'plugins.colors',
   require 'plugins.lualine',
   require 'plugins.treesitter',
   require 'plugins.telescope',
