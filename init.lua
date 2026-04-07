@@ -39,6 +39,7 @@ require('lazy').setup({
   require 'plugins.nvim-ts-autotag',
   require 'plugins.trouble',
   require 'plugins.harpoon',
+  require 'plugins.dap',
 }, {
   rocks = {
     enabled = false,
