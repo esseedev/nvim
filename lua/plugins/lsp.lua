@@ -208,6 +208,7 @@ return {
             -- ts_ls = {},
             --
             ts_ls = {
+                single_file_support = false,
                 settings = {
                     javascript = {
                         preferences = {
@@ -242,13 +243,13 @@ return {
                 end,
             },
             html = { filetypes = { 'html', 'twig', 'hbs', 'ts' } },
-            tailwindcss = {},
+            tailwindcss = { single_file_support = false },
             dockerls = {},
             sqlls = {},
             jsonls = {},
-            yamlls = {},
-            angularls = {},
-            volar = {},
+            yamlls = { single_file_support = false },
+            angularls = { single_file_support = false },
+            volar = { single_file_support = false },
             eslint = {
                 single_file_support = false,
                 on_new_config = function(config, new_root_dir)
@@ -304,6 +305,16 @@ return {
         -- for you, so that they are available from within Neovim.
         local ensure_installed = {
             'html-lsp',
+            'typescript-language-server',
+            'tailwindcss-language-server',
+            'dockerfile-language-server',
+            'sqls',
+            'json-lsp',
+            'yaml-language-server',
+            'angular-language-server',
+            'vue-language-server',
+            'eslint-lsp',
+            'lua-language-server',
             'roslyn',
         }
         vim.list_extend(ensure_installed, {
@@ -330,7 +341,12 @@ return {
 
             if vim.fn.has('nvim-0.11') == 1 then
                 vim.lsp.config(server_name, server)
-                vim.lsp.enable(server_name)
+                local ok_enable, err = pcall(vim.lsp.enable, server_name)
+                if not ok_enable then
+                    vim.schedule(function()
+                        vim.notify('LSP enable failed for ' .. server_name .. ': ' .. tostring(err), vim.log.levels.WARN)
+                    end)
+                end
             else
                 require('lspconfig')[server_name].setup(server)
             end
