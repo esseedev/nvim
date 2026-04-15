@@ -4,7 +4,6 @@ return { -- Highlight, edit, and navigate code
   event = { 'BufReadPost', 'BufNewFile' },
   priority = 1000,
 
-  main = 'nvim-treesitter.configs', -- Sets main module to use for opts
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   opts = {
     ensure_installed = {
@@ -47,6 +46,22 @@ return { -- Highlight, edit, and navigate code
       },
     },
   },
+  config = function(_, opts)
+    local ok, configs = pcall(require, 'nvim-treesitter.configs')
+    if not ok then
+      vim.schedule(function()
+        vim.notify('nvim-treesitter failed to load. Run :Lazy sync and :Lazy restore', vim.log.levels.WARN)
+      end)
+      return
+    end
+
+    configs.setup(opts)
+
+    vim.schedule(function()
+      local is_enabled = configs.is_enabled('highlight')
+      vim.notify('Treesitter loaded (highlight=' .. tostring(is_enabled) .. ')')
+    end)
+  end,
 
   -- There are additional nvim-treesitter modules that you can use to interact
   -- with nvim-treesitter. You should go explore a few and see what interests you:
