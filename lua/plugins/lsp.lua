@@ -250,10 +250,16 @@ return {
             angularls = {},
             volar = {},
             eslint = {
+                single_file_support = false,
                 on_new_config = function(config, new_root_dir)
+                    if not new_root_dir or new_root_dir == '' then
+                        return
+                    end
+
+                    config.settings = config.settings or {}
                     config.settings.workspaceFolder = {
                         uri = vim.uri_from_fname(new_root_dir),
-                        name = vim.fn.fnamemodify(new_root_dir, ''),
+                        name = vim.fn.fnamemodify(new_root_dir, ':t'),
                     }
                 end,
             },
