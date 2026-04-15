@@ -208,7 +208,6 @@ return {
             -- ts_ls = {},
             --
             ts_ls = {
-                single_file_support = false,
                 settings = {
                     javascript = {
                         preferences = {
@@ -243,24 +242,18 @@ return {
                 end,
             },
             html = { filetypes = { 'html', 'twig', 'hbs', 'ts' } },
-            tailwindcss = { single_file_support = false },
+            tailwindcss = {},
             dockerls = {},
             sqlls = {},
             jsonls = {},
-            yamlls = { single_file_support = false },
-            angularls = { single_file_support = false },
-            volar = { single_file_support = false },
+            yamlls = {},
+            angularls = {},
+            volar = {},
             eslint = {
-                single_file_support = false,
                 on_new_config = function(config, new_root_dir)
-                    if not new_root_dir or new_root_dir == '' then
-                        return
-                    end
-
-                    config.settings = config.settings or {}
                     config.settings.workspaceFolder = {
                         uri = vim.uri_from_fname(new_root_dir),
-                        name = vim.fn.fnamemodify(new_root_dir, ':t'),
+                        name = vim.fn.fnamemodify(new_root_dir, ''),
                     }
                 end,
             },
@@ -305,16 +298,6 @@ return {
         -- for you, so that they are available from within Neovim.
         local ensure_installed = {
             'html-lsp',
-            'typescript-language-server',
-            'tailwindcss-language-server',
-            'dockerfile-language-server',
-            'sqls',
-            'json-lsp',
-            'yaml-language-server',
-            'angular-language-server',
-            'vue-language-server',
-            'eslint-lsp',
-            'lua-language-server',
             'roslyn',
         }
         vim.list_extend(ensure_installed, {
@@ -331,25 +314,16 @@ return {
         require('mason-lspconfig').setup {
             ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
             automatic_installation = false,
+            handlers = {
+                function(server_name)
+                    local server = servers[server_name] or {}
+                    -- This handles overriding only values explicitly passed
+                    -- by the server configuration above. Useful when disabling
+                    -- certain features of an LSP (for example, turning off formatting for ts_ls)
+                    server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+                    require('lspconfig')[server_name].setup(server)
+                end,
+            },
         }
-
-        for server_name, server in pairs(servers) do
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-
-            if vim.fn.has('nvim-0.11') == 1 then
-                vim.lsp.config(server_name, server)
-                local ok_enable, err = pcall(vim.lsp.enable, server_name)
-                if not ok_enable then
-                    vim.schedule(function()
-                        vim.notify('LSP enable failed for ' .. server_name .. ': ' .. tostring(err), vim.log.levels.WARN)
-                    end)
-                end
-            else
-                require('lspconfig')[server_name].setup(server)
-            end
-        end
     end,
 }
