@@ -55,6 +55,17 @@ return { -- Highlight, edit, and navigate code
       return
     end
 
+    local ok_parsers, parsers = pcall(require, 'nvim-treesitter.parsers')
+    if ok_parsers and type(parsers.ft_to_lang) == 'table' then
+      local mt = getmetatable(parsers.ft_to_lang) or {}
+      if type(mt.__call) ~= 'function' then
+        mt.__call = function(tbl, ft)
+          return tbl[ft] or ft
+        end
+        setmetatable(parsers.ft_to_lang, mt)
+      end
+    end
+
     configs.setup(opts)
 
     vim.schedule(function()
