@@ -1,4 +1,4 @@
-vim.o.mouse = ''
+vim.o.mouse = 'a'
 vim.o.guicursor = ''
 vim.wo.number = true
 vim.o.relativenumber = true
