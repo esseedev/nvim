@@ -328,7 +328,7 @@ return {
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
 
-            if type(vim.lsp.config) == 'function' and type(vim.lsp.enable) == 'function' then
+            if vim.fn.has('nvim-0.11') == 1 then
                 vim.lsp.config(server_name, server)
                 vim.lsp.enable(server_name)
             else
