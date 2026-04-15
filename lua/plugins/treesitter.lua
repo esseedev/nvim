@@ -49,29 +49,10 @@ return { -- Highlight, edit, and navigate code
   config = function(_, opts)
     local ok, configs = pcall(require, 'nvim-treesitter.configs')
     if not ok then
-      vim.schedule(function()
-        vim.notify('nvim-treesitter failed to load. Run :Lazy sync and :Lazy restore', vim.log.levels.WARN)
-      end)
       return
     end
 
-    local ok_parsers, parsers = pcall(require, 'nvim-treesitter.parsers')
-    if ok_parsers and type(parsers.ft_to_lang) == 'table' then
-      local mt = getmetatable(parsers.ft_to_lang) or {}
-      if type(mt.__call) ~= 'function' then
-        mt.__call = function(tbl, ft)
-          return tbl[ft] or ft
-        end
-        setmetatable(parsers.ft_to_lang, mt)
-      end
-    end
-
     configs.setup(opts)
-
-    vim.schedule(function()
-      local is_enabled = configs.is_enabled('highlight')
-      vim.notify('Treesitter loaded (highlight=' .. tostring(is_enabled) .. ')')
-    end)
   end,
 
   -- There are additional nvim-treesitter modules that you can use to interact

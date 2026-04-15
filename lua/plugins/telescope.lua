@@ -23,6 +23,14 @@ return { -- Fuzzy Finder (files, lsp, etc)
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
   },
   config = function()
+    local ok_parsers, parsers = pcall(require, 'nvim-treesitter.parsers')
+    if ok_parsers and type(parsers.ft_to_lang) == 'table' then
+      local ft_map = parsers.ft_to_lang
+      parsers.ft_to_lang = function(ft)
+        return ft_map[ft] or ft
+      end
+    end
+
     -- Telescope is a fuzzy finder that comes with a lot of different things that
     -- it can fuzzy find! It's more than just a "file finder", it can search
     -- many different aspects of Neovim, your workspace, LSP, and more!
@@ -53,6 +61,11 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
       --   },
       -- },
+      defaults = {
+        preview = {
+          treesitter = false,
+        },
+      },
       pickers = {
         find_files = {
           file_ignore_patterns = { '^node_modules/' },
