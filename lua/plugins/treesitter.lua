@@ -48,13 +48,6 @@ return { -- Highlight, edit, and navigate code
     },
   },
 
-  config = function(_, opts)
-    require('nvim-treesitter.configs').setup(opts)
-    -- Debug statement to verify loading
-    vim.defer_fn(function()
-      vim.notify('Treesitter incremental selection module loaded: ' .. tostring(require('nvim-treesitter.configs').is_enabled 'incremental_selection'))
-    end, 1000)
-  end,
   -- There are additional nvim-treesitter modules that you can use to interact
   -- with nvim-treesitter. You should go explore a few and see what interests you:
   --
