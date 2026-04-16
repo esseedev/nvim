@@ -4,3 +4,5 @@ vim.filetype.add {
     cshtml = 'razor',
   },
 }
+
+pcall(vim.treesitter.language.register, 'html', 'razor')

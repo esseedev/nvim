@@ -241,7 +241,7 @@ return {
                     end, { buffer = bufnr, desc = 'TypeScript Code Actions' })
                 end,
             },
-            html = { filetypes = { 'html', 'twig', 'hbs', 'ts' } },
+            html = { filetypes = { 'html', 'twig', 'hbs', 'ts', 'razor', 'cshtml' } },
             tailwindcss = {},
             dockerls = {},
             sqlls = {},
