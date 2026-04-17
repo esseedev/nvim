@@ -24,6 +24,7 @@ keymap.set('n', '<leader>e', ':Explore<CR>') -- Go to explorer
 keymap.set('n', '<leader>E', function()
   vim.cmd('Explore ' .. vim.fn.getcwd())
 end)
+keymap.set('n', '<leader>gb', ':Gitsigns blame<CR>')
 keymap.set('n', '<leader>v', '<C-w>v')
 keymap.set('n', '<leader>h', '<C-w>s')
 keymap.set('n', '<leader>xs', ':close<CR>')

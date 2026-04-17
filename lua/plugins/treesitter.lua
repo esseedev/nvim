@@ -1,6 +1,7 @@
 return { -- Highlight, edit, and navigate code
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
+  branch = 'master',
   event = { 'BufReadPost', 'BufNewFile' },
   priority = 1000,
 

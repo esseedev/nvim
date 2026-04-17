@@ -34,4 +34,9 @@ return {
       enable = true,
     },
   },
+  {
+    'lewis6991/gitsigns.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = {},
+  },
 }
