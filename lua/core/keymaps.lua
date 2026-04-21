@@ -3,16 +3,6 @@ vim.g.maplocalleader = ' '
 
 local keymap = vim.keymap
 
-local function with_lsp(action)
-  return function()
-    if next(vim.lsp.get_clients { bufnr = 0 }) == nil then
-      vim.notify('No LSP attached for current buffer', vim.log.levels.WARN)
-      return
-    end
-    action()
-  end
-end
-
 keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- move highlighted line down
 keymap.set('v', 'K', ":m '<-2<CR>gv=gv") -- move highlighted line up
 
@@ -59,21 +49,5 @@ keymap.set('v', '<', '<gv')
 keymap.set('v', '>', '>gv')
 
 keymap.set('n', '<leader>pr', ':silent %!prettier %<CR>')
-keymap.set('n', 'gr', with_lsp(function()
-  local ok, telescope = pcall(require, 'telescope.builtin')
-  if ok then
-    telescope.lsp_references()
-    return
-  end
-  vim.lsp.buf.references()
-end), { desc = 'LSP references' })
-keymap.set('n', 'gI', with_lsp(function()
-  local ok, telescope = pcall(require, 'telescope.builtin')
-  if ok then
-    telescope.lsp_implementations()
-    return
-  end
-  vim.lsp.buf.implementation()
-end), { desc = 'LSP implementations' })
 
 keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
