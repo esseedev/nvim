@@ -2,6 +2,9 @@ return {
   {
     'seblyng/roslyn.nvim',
     ft = { 'cs', 'razor' },
+    config = function(_, opts)
+      require('roslyn').setup(opts)
+    end,
     opts = {
       settings = {
         ['csharp|inlay_hints'] = {

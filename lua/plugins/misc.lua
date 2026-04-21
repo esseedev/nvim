@@ -40,16 +40,13 @@ return {
     opts = {},
   },
   {
-    'kdheepak/lazygit.nvim',
-    cmd = {
-      'LazyGit',
-      'LazyGitConfig',
-      'LazyGitCurrentFile',
-      'LazyGitFilter',
-      'LazyGitFilterCurrentFile',
-    },
+    'NeogitOrg/neogit',
+    cmd = 'Neogit',
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'sindrets/diffview.nvim',
+      'nvim-telescope/telescope.nvim',
     },
+    opts = {},
   },
 }
