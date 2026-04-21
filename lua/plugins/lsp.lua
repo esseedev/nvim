@@ -88,12 +88,11 @@ return {
                 map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
                 local function code_action_all_diagnostics()
-                    local params = vim.lsp.util.make_range_params()
-                    params.context = {
-                        diagnostics = vim.diagnostic.get(event.buf),
-                        triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Invoked,
+                    vim.lsp.buf.code_action {
+                        context = {
+                            diagnostics = vim.diagnostic.get(event.buf),
+                        },
                     }
-                    vim.lsp.buf.code_action(params)
                 end
 
                 -- Execute a code action, usually your cursor needs to be on top of an error
