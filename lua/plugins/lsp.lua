@@ -88,9 +88,17 @@ return {
                 map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
                 local function code_action_all_diagnostics()
+                    local line_count = vim.api.nvim_buf_line_count(event.buf)
+                    local last_line = math.max(line_count - 1, 0)
+                    local last_line_text = vim.api.nvim_buf_get_lines(event.buf, last_line, line_count, false)[1] or ''
                     vim.lsp.buf.code_action {
+                        range = {
+                            start = { line = 0, character = 0 },
+                            ['end'] = { line = last_line, character = #last_line_text },
+                        },
                         context = {
                             diagnostics = vim.diagnostic.get(event.buf),
+                            triggerKind = 1,
                         },
                     }
                 end
@@ -106,6 +114,13 @@ return {
                             apply = true,
                         }
                     end, '[C]ode Add [I]mports')
+
+                    map('<leader>cF', function()
+                        vim.lsp.buf.code_action {
+                            context = { only = { 'source.fixAll' } },
+                            apply = true,
+                        }
+                    end, '[C]ode [F]ix all')
                 end
 
                 -- WARN: This is not Goto Definition, this is Goto Declaration.
