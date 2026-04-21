@@ -87,9 +87,27 @@ return {
                 --  Most Language Servers support renaming across files, etc.
                 map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
+                local function code_action_all_diagnostics()
+                    local params = vim.lsp.util.make_range_params()
+                    params.context = {
+                        diagnostics = vim.diagnostic.get(event.buf),
+                        triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Invoked,
+                    }
+                    vim.lsp.buf.code_action(params)
+                end
+
                 -- Execute a code action, usually your cursor needs to be on top of an error
                 -- or a suggestion from your LSP for this to activate.
-                map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+                map('<leader>ca', code_action_all_diagnostics, '[C]ode [A]ction', { 'n', 'x' })
+
+                if client and client.name == 'roslyn' then
+                    map('<leader>cI', function()
+                        vim.lsp.buf.code_action {
+                            context = { only = { 'source.addMissingImports' } },
+                            apply = true,
+                        }
+                    end, '[C]ode Add [I]mports')
+                end
 
                 -- WARN: This is not Goto Definition, this is Goto Declaration.
                 --  For example, in C this would take you to the header.
