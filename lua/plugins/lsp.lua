@@ -242,21 +242,6 @@ return {
                         importModuleSpecifierPreference = 'non-relative',
                     },
                 },
-                on_attach = function(client, bufnr)
-                    -- Add a custom keymap for TypeScript-specific code actions
-                    vim.keymap.set('n', '<leader>cA', function()
-                        local params = {
-                            context = {
-                                only = {
-                                    'source.addMissingImports.ts',
-                                    'source.removeUnusedImports.ts',
-                                    'source.fixAll.ts',
-                                },
-                            },
-                        }
-                        vim.lsp.buf.code_action(params)
-                    end, { buffer = bufnr, desc = 'TypeScript Code Actions' })
-                end,
             },
             html = { filetypes = { 'html', 'twig', 'hbs', 'ts', 'razor', 'cshtml' } },
             tailwindcss = {},
