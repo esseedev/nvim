@@ -55,6 +55,13 @@ keymap.set('n', '<F2>', function()
   vim.diagnostic.jump { count = -1, float = true }
 end, { desc = 'Previous diagnostic' })
 
+keymap.set({ 'n', 'i' }, '<F4>', vim.lsp.buf.signature_help, {
+  desc = 'Show signature help',
+})
+keymap.set('n', '<F5>', '<Plug>(nvim.lsp.ctrl-s)', {
+  desc = 'Next overload',
+})
+
 keymap.set('v', '<', '<gv')
 keymap.set('v', '>', '>gv')
 

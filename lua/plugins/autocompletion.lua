@@ -182,6 +182,20 @@ public class {}
                 end,
             },
             completion = { completeopt = 'menu,menuone,noinsert' },
+            window = {
+                completion = cmp.config.window.bordered {
+                    border = 'single',
+                    max_height = 10,
+                    side_padding = 0,
+                    winhighlight = 'Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None',
+                    winblend = 0,
+                },
+                documentation = cmp.config.window.bordered {
+                    border = 'single',
+                    winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,Search:None',
+                    winblend = 0,
+                },
+            },
 
             -- For an understanding of why these mappings were
             -- chosen, you will need to read `:help ins-completion`

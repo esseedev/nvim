@@ -19,6 +19,9 @@ vim.o.undofile = true
 vim.o.swapfile = false
 vim.o.autochdir = false
 vim.o.termguicolors = true
+vim.o.winborder = 'single'
+vim.o.winblend = 0
+vim.o.pumblend = 0
 
 vim.cmd 'set noautochdir'
 
